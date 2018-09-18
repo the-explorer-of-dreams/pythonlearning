@@ -44,18 +44,21 @@ def hello():
     # yield from asyncio.sleep(5)
     for i in range(200000000):
         pass
+    # yield from kill_time()
     print('Hello again! (%s)' % threading.currentThread())
 
 @asyncio.coroutine
 def loopmax1():
     print('loopmax1 (%s)' % threading.currentThread())
     print('loopmax1 loop start')
-    for i in range(100000):
+    for i in range(80000000):
         pass
     print('loopmax1 loop end')
     global maxstarttime
     maxstarttime = datetime.now()
-    yield from asyncio.sleep(1)
+    # yield from asyncio.sleep(3)
+    yield from asyncio.wait([asyncio.ensure_future(kill_time())])
+    # kill_time()
     print('loopmax1 wake up :',datetime.now() - maxstarttime)
 
     print('loopmax1 again! (%s)' % threading.currentThread())
@@ -64,12 +67,20 @@ def loopmax1():
 def loopmax2():
     print('loopmax2(%s)' % threading.currentThread())
     print('loopmax2 loop start')
-    for i in range(200000000):
+    for i in range(20000):
         pass
     print('loopmax2 loop end')
 
-    yield from asyncio.sleep(3)
+    yield from asyncio.sleep(1)
     print('loopmax2 again! (%s)' % threading.currentThread())
+
+@asyncio.coroutine
+def kill_time():
+    print('kill_time loop start')
+    for i in range(80000000):
+        pass
+    print('kill_time loop end')
+
 
 print('main: %s ' % threading.current_thread())
 loop = asyncio.get_event_loop()
@@ -77,6 +88,7 @@ loop = asyncio.get_event_loop()
 tasks = [hello(), loopmax1(), loopmax2()]
 loop.run_until_complete(asyncio.wait(tasks))
 loop.close()
+
 
 # def g1():
 #     yield range(5)

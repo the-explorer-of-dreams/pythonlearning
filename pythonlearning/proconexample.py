@@ -2,13 +2,13 @@
 # -*- coding: utf-8 -*-
 """
 -------------------------------------------------
-   File Name：     corutineexample
+   File Name：     proconexample
    Description :
    Author :       william
-   date：          2018/8/20
+   date：          2018/8/27
 -------------------------------------------------
    Change Activity:
-                   2018/8/20:
+                   2018/8/27:
 -------------------------------------------------
 """
 __author__ = 'william'
@@ -17,24 +17,21 @@ __author__ = 'william'
 def consumer():
     r = ''
     while True:
-        n = yield r
-        if not n:
-            return
-        print('[CONSUMER] Consuming %s...' % n)
+        product = yield r
+        print('consuming the product %d' % product)
         r = '200 OK'
 
 
-def produce(c):
+def producer(c):
     c.send(None)
     n = 0
     while n < 5:
-        n = n + 1
-        print('[PRODUCER] Producing %s...' % n)
+        n += 1
+        print('sending consumer %d' % n)
         r = c.send(n)
-        print('[PRODUCER] Consumer return: %s' % r)
+        print('consumer return %s' % r)
     c.close()
 
-c = consumer()
-produce(c)
 
-from orm import 
+c = consumer()
+producer(c)

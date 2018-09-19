@@ -22,8 +22,16 @@ __author__ = 'william'
 #     for line in file_object:
 #         print(line.rstrip())
 
-with open('pi_digits.txt') as file_object:
+file_name = 'pi_digits.txt'
+with open(file_name) as file_object:
     lines = file_object.readlines()
 
+pi_string = ''
 for line in lines:
-    print(line.rstrip())
+    pi_string += line.strip()
+
+print(pi_string)
+print(len(pi_string))
+
+PI = float(pi_string)
+print(PI)
